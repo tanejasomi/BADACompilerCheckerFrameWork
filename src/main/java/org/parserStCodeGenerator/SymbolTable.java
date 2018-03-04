@@ -5,8 +5,6 @@ import java.util.Hashtable;
 import java.util.LinkedList;
 import java.util.Stack;
 
-import org.checkerframework.checker.initialization.qual.UnderInitialization;
-import org.checkerframework.checker.nullness.qual.*;
 /**************************************************************************
  * @author somyataneja, Prog Lang: Java 8 , IDE Eclipse, JDK 1.8
  * @Description: Class Symbol Table contains symbol table related function.
@@ -44,7 +42,7 @@ public class SymbolTable {
 	************************************************************************/
 	private Stack<Hashtable<String, STVal>> activeStack; 
 	private LinkedList<Hashtable<String, STVal>> inactiveSt; 
-	private @Nullable Hashtable<String, STVal> currSt;
+	private Hashtable<String, STVal> currSt;
 	private static int scopeNo;
 
 	public SymbolTable() {
@@ -68,8 +66,7 @@ public class SymbolTable {
 	*************************************************************************/
 	public void createSymbolTable() {
 
-		if (scopeNo != 0 && (currSt != null) && currSt.isEmpty()){ /*This condition occurs only when at least
-		                            one local scope closes and current scope changes to global scope.*/
+		if (scopeNo != 0 && currSt.isEmpty()){
 		} else {
 			currSt = createNewST();
 			activeStack.push(currSt);
@@ -92,7 +89,7 @@ public class SymbolTable {
 	/*********************************************************************** 
 	 Find token in all active blocks ST
 	************************************************************************/
-	public @Nullable STVal findInAll(String token) {
+	public STVal findInAll(String token) {
 		STVal val = new STVal();
 		for (Hashtable<String, STVal> ht : activeStack) {
 			val = findInST(token, ht);
@@ -105,7 +102,7 @@ public class SymbolTable {
 	/*********************************************************************** 
 	 Return value if token is present in input scope (hashtable)
 	************************************************************************/
-	public @Nullable STVal findInST(String token, Hashtable<String, STVal> st) {
+	public STVal findInST(String token, Hashtable<String, STVal> st) {
 		if (st.isEmpty()) {
 			return null;
 		}
@@ -125,7 +122,7 @@ public class SymbolTable {
 	/*********************************************************************** 
 	Check if token already present in Current scope.
 	************************************************************************/
-	public @Nullable STVal isPresentinCurrentScope(String token) {
+	public STVal isPresentinCurrentScope(String token) {
 		if(currSt != null) //null check to ensure non null currSt
 	        return (findInST(token, currSt));
 		else

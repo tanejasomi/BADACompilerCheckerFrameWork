@@ -1,9 +1,5 @@
 package org.parserStCodeGenerator;
 
-import org.checkerframework.checker.nullness.qual.NonNull;
-import org.checkerframework.dataflow.qual.Pure;
-import org.checkerframework.dataflow.qual.SideEffectFree;
-
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
@@ -80,7 +76,6 @@ public class Parser {
 	List<String> strLabelLst; 
 	
 
-	@SuppressWarnings("Initialization")
 	Parser(String infileName, String outFilePath) {
 		inputFile = infileName;
 		index = 0; // initialize index
@@ -147,7 +142,7 @@ public class Parser {
 		boolean ifDupFlag = false; // duplicate flag to avoid storing duplicate values in ST
 		if (token.equals(IDTOK)) {
 			STVal sval = new STVal();
-			// check if token already declared in current scopt
+			// check if token already declared in current scope
 			if (st.isPresentinCurrentScope(tokVal) != null) {
 				System.out.println("Error: token " + tokVal + " already exits in current scope");
 				codeOK = false;
@@ -162,7 +157,7 @@ public class Parser {
 	/***********************************************************************
 	  rest : BASTYPTOK ';' | CONSTTOK BASTYPTOK ASTOK LITTOK ';'
 	 ************************************************************************/
-	public void rest(@NonNull STVal sval, boolean ifDupFlag) {
+	public void rest(STVal sval, boolean ifDupFlag) {
 		if (token.equals(BASTYPTOK)) {
 			sval.isConst = false;
 			sval.type = tokVal;
@@ -180,18 +175,15 @@ public class Parser {
 			match(ESTOK);
 		}
 
-		if (!ifDupFlag && sval != null) { // if no duplicate value then insert in ST
+		if (!ifDupFlag) { // if no duplicate value then insert in ST
 			setLocation(sval);
-			if(sval.name != null){
-                st.insertInST(sval.name, sval);
-            }
+			st.insertInST(sval.name, sval);
 
 		}
 	}
 	/***********************************************************************
 	 Calculate current location as -4 from last saved variable location
 	 ************************************************************************/
-    @SideEffectFree
 	public void setLocation(STVal sval) {
 
 		sval.location = currLoc;
@@ -628,7 +620,6 @@ public class Parser {
 	check for token in current scope in Symbol table. If not present find 
 	in all scopes to get value attributes of token. 
 	*************************************************************************/
-	@SuppressWarnings("dereference.of.nullable")
 	public ExpRec idnonterm() {
 		ExpRec expRec = new ExpRec();
 		if (token.equals(IDTOK)) {
@@ -646,7 +637,7 @@ public class Parser {
 				if (stval.isConst) // if is_constant is true set type = c
 					expRec.type = 'c';
 				else {
-					expRec.type = stval.type.charAt(0); //stval is already checked for null in enclosing if statement
+					expRec.type = stval.type.charAt(0);
 				}
 
 				expRec.loc = stval.location;

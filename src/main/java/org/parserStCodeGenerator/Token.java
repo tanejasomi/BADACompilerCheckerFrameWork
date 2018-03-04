@@ -1,7 +1,5 @@
 package org.parserStCodeGenerator;
 
-import org.checkerframework.checker.nullness.qual.Nullable;
-
 /**************************************************************************
  * @author somyataneja Prog Lang: Java 8 , IDE Eclipse, JDK 1.8 
  * Token class define token structure and implements generic. Token stores
@@ -21,10 +19,10 @@ public class Token {
 	  3) tokenId: to store corresponding value of token id
 	  4) line: stores line number for display in case of error.
 	 ***********************************************************************/
-	@Nullable private String lexeme;
-	@Nullable private String lexType;
-	@Nullable private String tokenId;
-	@Nullable private String line;
+	private String lexeme;
+	private String lexType;
+	private String tokenId;
+	private String line;
 	
 	public Token(String type, String val, int line) {
 

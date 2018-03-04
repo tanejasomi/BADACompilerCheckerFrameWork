@@ -1,7 +1,5 @@
 package org.parserStCodeGenerator;
 
-import org.checkerframework.checker.initialization.qual.*;
-import org.checkerframework.checker.nullness.qual.*;
 import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileWriter;
@@ -33,19 +31,19 @@ public class CodeGeneration {
 	************************************************************************/
 	 String outputFile; // Stores output file name
 	 BufferedWriter bw;
-	@MonotonicNonNull FileWriter fileWriter;
-	@MonotonicNonNull File f;
+	 FileWriter fileWriter;
+	 File f;
 
-	@SuppressWarnings("initialization")
+
 	CodeGeneration(String outFilePath) {
+
 		outputFile = (outFilePath + "/mipsOutput.s"); // generate file in path provided
 	}
 	
 	/*********************************************************************** 
 	 Open file if present else create new with name mipsOutput.s and open 
 	************************************************************************/
-	//@EnsuresNonNull("bw")
-	public void openFile(/*@UnderInitialization(CodeGeneration.class) CodeGeneration this*/){
+	public void openFile(){
 		try {
 			this.f = new File(outputFile);
 			if (!f.exists()) {

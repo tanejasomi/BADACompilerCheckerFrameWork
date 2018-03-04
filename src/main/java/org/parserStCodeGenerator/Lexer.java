@@ -331,15 +331,14 @@ public class Lexer {
 	/***********************************************************************
 	 * Initialize line number
 	 ************************************************************************/
-	public void setLineNum(@UnderInitialization Lexer this, int lineNum) {
+	public void setLineNum( int lineNum) {
 		this.lineNum = lineNum;
 	}
 	
 	/***********************************************************************
 	 * Convert string to character array and initialize buffer
 	 ************************************************************************/
-	@EnsuresNonNull({"buffer"})
-	public void setInput(@UnderInitialization Lexer this, String input) {
+	public void setInput( String input) {
 		this.buffer = input.toCharArray();
 	}
 

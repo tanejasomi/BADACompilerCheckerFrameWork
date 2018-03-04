@@ -1,6 +1,4 @@
 package org.parserStCodeGenerator;
-import org.checkerframework.checker.initialization.qual.*;
-import org.checkerframework.checker.nullness.qual.*;
 
 /*********************************************************************************
  * @author somyataneja Programming Language: Java 8 , IDE Eclipse, JDK 1.8 
@@ -10,8 +8,8 @@ import org.checkerframework.checker.nullness.qual.*;
  ********************************************************************************/
 
 public class STVal {
-	@Nullable String name;
-	@Nullable String type;
+	String name;
+	String type;
 	int location;
 	boolean isConst;
 	int scopeNo;

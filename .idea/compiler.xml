@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="CompilerConfiguration">
+    <annotationProcessing>
+      <profile default="true" name="Default" enabled="true">
+        <processorPath useClasspath="false">
+          <entry name="$USER_HOME$/Downloads/checker-framework-2.3.2/checker/dist/checker.jar" />
+        </processorPath>
+      </profile>
+      <profile name="Annotation profile for BADA-checkerfarmework-analysis" enabled="true">
+        <sourceOutputDir name="target/generated-sources/annotations" />
+        <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
+        <outputRelativeToContentRoot value="true" />
+        <processor name="org.checkerframework.checker.nullness.NullnessChecker" />
+        <module name="BADACompilerCheckerFrameWork" />
+      </profile>
+    </annotationProcessing>
+    <bytecodeTargetLevel>
+      <module name="BADACompilerCheckerFramework" target="1.5" />
+      <module name="BADACompilerCheckerFrameWork" target="1.8" />
+    </bytecodeTargetLevel>
+  </component>
+  <component name="JavacSettings">
+    <option name="ADDITIONAL_OPTIONS_STRING" value="-Xbootclasspath/p: &quot;$USER_HOME$/Downloads/checker-framework-2.3.2/checker/dist/jdk8.jar&quot;" />
+  </component>
+</project>
