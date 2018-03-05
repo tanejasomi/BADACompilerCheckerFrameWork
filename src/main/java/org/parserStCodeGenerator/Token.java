@@ -1,5 +1,10 @@
 package org.parserStCodeGenerator;
 
+import org.checkerframework.checker.initialization.qual.UnderInitialization;
+import org.checkerframework.checker.nullness.qual.EnsuresNonNull;
+import org.checkerframework.checker.nullness.qual.Nullable;
+import org.checkerframework.checker.nullness.qual.RequiresNonNull;
+
 /**************************************************************************
  * @author somyataneja Prog Lang: Java 8 , IDE Eclipse, JDK 1.8 
  * Token class define token structure and implements generic. Token stores
@@ -22,24 +27,31 @@ public class Token {
 	private String lexeme;
 	private String lexType;
 	private String tokenId;
-	private String line;
+	private @Nullable String line;
 	
 	public Token(String type, String val, int line) {
 
 		this.line = Integer.toString(line);
 		this.lexType = type;
 		this.lexeme = val;
-		//this.setTokenId();
-		this.tokenId = Constant.mapper.get(lexType.toUpperCase());
+		this.setTokenId();
+		//this.tokenId = Constant.mapper.get(lexType.toUpperCase());
+
 	}
 
 	/***********************************************************************
 	  Set tokenId to predefined tokenId for given value of token stored in
 	  constant.mapper.
 	 ************************************************************************/
-	private void setTokenId() {
-		this.tokenId = Constant.mapper.get(lexType.toUpperCase());
-	}
+	@EnsuresNonNull("tokenId")
+    @RequiresNonNull("lexType")
+	private void setTokenId(@UnderInitialization Token this) {
+		String iD = Constant.mapper.get(lexType.toUpperCase());
+        if(iD == null) //for invalid language character set id to 0
+            this.tokenId = "0"; // Value will be checked in Lexer class handle error.
+        else
+            this.tokenId = iD;
+    }
 	
 	/***********************************************************************
 	  Getter method to return token id used by Lexer class

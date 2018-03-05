@@ -1,5 +1,9 @@
 package org.parserStCodeGenerator;
 
+import org.checkerframework.checker.nullness.qual.EnsuresNonNull;
+import org.checkerframework.checker.nullness.qual.Nullable;
+import org.checkerframework.checker.initialization.qual.*;
+
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
@@ -76,6 +80,7 @@ public class Parser {
 	List<String> strLabelLst; 
 	
 
+	@SuppressWarnings("method.invocation.invalid") //function call required as per specifications
 	Parser(String infileName, String outFilePath) {
 		inputFile = infileName;
 		index = 0; // initialize index
@@ -175,15 +180,18 @@ public class Parser {
 			match(ESTOK);
 		}
 
-		if (!ifDupFlag) { // if no duplicate value then insert in ST
+		if (!ifDupFlag && sval != null) { // if no duplicate value then insert in ST
 			setLocation(sval);
-			st.insertInST(sval.name, sval);
+			if(sval.name != null){
+			    st.insertInST(sval.name, sval);
+			}
 
 		}
 	}
 	/***********************************************************************
 	 Calculate current location as -4 from last saved variable location
 	 ************************************************************************/
+	//@Pure
 	public void setLocation(STVal sval) {
 
 		sval.location = currLoc;
@@ -620,6 +628,7 @@ public class Parser {
 	check for token in current scope in Symbol table. If not present find 
 	in all scopes to get value attributes of token. 
 	*************************************************************************/
+	@SuppressWarnings("dereference.of.nullable")
 	public ExpRec idnonterm() {
 		ExpRec expRec = new ExpRec();
 		if (token.equals(IDTOK)) {
@@ -633,7 +642,8 @@ public class Parser {
 				System.out.println("Error: undefined variable: " 
 						+ tokVal + " in line no " + lineNum);
 				codeOK = false;
-			} else {
+			} else {//stval is already checked for null in enclosing if statement
+                 // therefore no possible dereference of nullable
 				if (stval.isConst) // if is_constant is true set type = c
 					expRec.type = 'c';
 				else {
@@ -671,7 +681,7 @@ public class Parser {
 	/***********************************************************************
 	 Getter method to return lexeme from tokenlst
 	 ************************************************************************/
-	public String getLexeme() {
+	public @Nullable String getLexeme() {
 		Token tok = tokenLst.get(index);
 		String tokLexeme = tok.getTokLexeme();
 		return tokLexeme;
@@ -679,7 +689,8 @@ public class Parser {
 	/***********************************************************************
 	 Getter method to return token from token list
 	 ************************************************************************/
-	public String getNextToken() {
+	@EnsuresNonNull("tokVal")
+	public String getNextToken(@UnknownInitialization( org.parserStCodeGenerator.Parser.class) Parser this) {
 		Token tok = tokenLst.get(index);
 		String tokId = tok.getTokenId();
 		tokVal = tok.getTokLexeme();
@@ -762,6 +773,7 @@ public class Parser {
 		try {
 			File file = new File(inputFile);
 
+
 			try {
 				FileReader fileReader = new FileReader(file);
 				reader = new BufferedReader(fileReader);
@@ -828,8 +840,9 @@ public class Parser {
 
 	/***********************************************************************
 	 method to set token value
-	 ************************************************************************/ 
-	public void setToken() {
+	 ************************************************************************/
+	@EnsuresNonNull({"token","tokVal"})
+	public void setToken(@UnknownInitialization(Parser.class) Parser this) {
 		this.token = getNextToken();
 	}
 }

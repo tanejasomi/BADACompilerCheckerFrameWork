@@ -39,6 +39,7 @@ import java.util.Map;
  *    read token   							25 
  *    numeric literals		         		26
  *    end-of-file    					 	-1
+ *    unknown literal (error)                0
  *****************************************************************/
 public class Constant {
 

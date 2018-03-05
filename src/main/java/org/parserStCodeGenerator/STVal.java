@@ -1,5 +1,7 @@
 package org.parserStCodeGenerator;
 
+import org.checkerframework.checker.nullness.qual.Nullable;
+
 /*********************************************************************************
  * @author somyataneja Programming Language: Java 8 , IDE Eclipse, JDK 1.8 
  * Class STVal represent declaration of element for SymbolTable. This struct
@@ -8,8 +10,8 @@ package org.parserStCodeGenerator;
  ********************************************************************************/
 
 public class STVal {
-	String name;
-	String type;
+	@Nullable String name;
+	@Nullable String type;
 	int location;
 	boolean isConst;
 	int scopeNo;

@@ -35,7 +35,9 @@ public class CodeGeneration {
 	 File f;
 
 
-	CodeGeneration(String outFilePath) {
+	@SuppressWarnings("initialization.fields.uninitialized")
+        //fields are initialized in function openFile() which is called by class Parser
+	 CodeGeneration(String outFilePath) {
 
 		outputFile = (outFilePath + "/mipsOutput.s"); // generate file in path provided
 	}

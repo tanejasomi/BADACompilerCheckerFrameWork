@@ -1,5 +1,6 @@
 package org.parserStCodeGenerator;
 
+import org.checkerframework.checker.nullness.qual.Nullable;
 import java.util.Enumeration;
 import java.util.Hashtable;
 import java.util.LinkedList;
@@ -42,7 +43,7 @@ public class SymbolTable {
 	************************************************************************/
 	private Stack<Hashtable<String, STVal>> activeStack; 
 	private LinkedList<Hashtable<String, STVal>> inactiveSt; 
-	private Hashtable<String, STVal> currSt;
+	private @Nullable Hashtable<String, STVal> currSt;
 	private static int scopeNo;
 
 	public SymbolTable() {
@@ -66,7 +67,8 @@ public class SymbolTable {
 	*************************************************************************/
 	public void createSymbolTable() {
 
-		if (scopeNo != 0 && currSt.isEmpty()){
+		if (scopeNo != 0 && (currSt != null) && currSt.isEmpty()){ /*This condition occurs only when at least
+	                            one local scope closes and current scope changes to default global scope.*/
 		} else {
 			currSt = createNewST();
 			activeStack.push(currSt);
@@ -89,7 +91,7 @@ public class SymbolTable {
 	/*********************************************************************** 
 	 Find token in all active blocks ST
 	************************************************************************/
-	public STVal findInAll(String token) {
+	public @Nullable STVal findInAll(String token) {
 		STVal val = new STVal();
 		for (Hashtable<String, STVal> ht : activeStack) {
 			val = findInST(token, ht);
@@ -102,7 +104,7 @@ public class SymbolTable {
 	/*********************************************************************** 
 	 Return value if token is present in input scope (hashtable)
 	************************************************************************/
-	public STVal findInST(String token, Hashtable<String, STVal> st) {
+	public @Nullable STVal findInST(String token, Hashtable<String, STVal> st) {
 		if (st.isEmpty()) {
 			return null;
 		}
@@ -122,7 +124,7 @@ public class SymbolTable {
 	/*********************************************************************** 
 	Check if token already present in Current scope.
 	************************************************************************/
-	public STVal isPresentinCurrentScope(String token) {
+	public @Nullable STVal isPresentinCurrentScope(String token) {
 		if(currSt != null) //null check to ensure non null currSt
 	        return (findInST(token, currSt));
 		else
@@ -152,8 +154,10 @@ public class SymbolTable {
 		while (keys.hasMoreElements()) {
 			String key = keys.nextElement();
 			STVal s = st.get(key);
-			System.out.print("(" + s.scopeNo + " , " + s.name + ", " + s.type + 
-				", " + s.location + ", Is Constant: "+ s.isConst + " ) ");
+			if(s != null) {
+                System.out.print("(" + s.scopeNo + " , " + s.name + ", " + s.type +
+                        ", " + s.location + ", Is Constant: " + s.isConst + " ) ");
+            }
 		}
 		System.out.println(); // new line for next scope for better display
 	}
